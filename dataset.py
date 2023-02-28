@@ -6,7 +6,6 @@ from PIL import Image
 import torch
 import torch.utils.data as data
 import torchvision.transforms as transforms
-#import os
 
 #from utils import is_image_file, load_img
 
@@ -15,30 +14,24 @@ class DatasetFromFolder(data.Dataset):
     def __init__(self, image_dir, direction):
         super(DatasetFromFolder, self).__init__()
         self.direction = direction
-        self.a_path = join(image_dir, "a") #os.path.join(image_dir,"a")
-        self.b_path = join(image_dir, "b") #get path
+        self.a_path = join(image_dir, "a")
+        self.b_path = join(image_dir, "b")
         self.image_filenames = [x for x in listdir(self.a_path)]
 
-        #result = []
-        #for x in listdir(self.a_path):
-            #if is_image_file(x):
-                #result.append(x)
-        #self_image_filenames = result
+        transform_list = [transforms.ToTensor(),
+                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
 
-        transform_list = [transforms.ToTensor(), #throw to neural network need to change to tensor
-                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))] #RGB change to -1~1 #can delete because below have
-
-        self.transform = transforms.Compose(transform_list) #can delete because below have
+        self.transform = transforms.Compose(transform_list)
 
     def __getitem__(self, index):
-        a = Image.open(join(self.a_path, self.image_filenames[index])).convert('RGB') #0~1 #convert = change the order of RGB
-        b = Image.open(join(self.b_path, self.image_filenames[index])).convert('RGB') #save image number into matrix
-        a = a.resize((286, 286), Image.BICUBIC) #change the image to the same size
-        b = b.resize((286, 286), Image.BICUBIC) #best method to resize BICUBIC
+        a = Image.open(join(self.a_path, self.image_filenames[index])).convert('RGB')
+        b = Image.open(join(self.b_path, self.image_filenames[index])).convert('RGB')
+        a = a.resize((286, 286), Image.BICUBIC)
+        b = b.resize((286, 286), Image.BICUBIC)
         a = transforms.ToTensor()(a)
         b = transforms.ToTensor()(b)
-        w_offset = random.randint(0, max(0, 286 - 256 - 1)) #unknown
-        h_offset = random.randint(0, max(0, 286 - 256 - 1)) #unknown #not recommend need to delete
+        w_offset = random.randint(0, max(0, 286 - 256 - 1))
+        h_offset = random.randint(0, max(0, 286 - 256 - 1))
     
         a = a[:, h_offset:h_offset + 256, w_offset:w_offset + 256]
         b = b[:, h_offset:h_offset + 256, w_offset:w_offset + 256]
@@ -50,12 +43,12 @@ class DatasetFromFolder(data.Dataset):
             idx = [i for i in range(a.size(2) - 1, -1, -1)]
             idx = torch.LongTensor(idx)
             a = a.index_select(2, idx)
-            b = b.index_select(2, idx) #increase the dataset size
+            b = b.index_select(2, idx)
 
-        if self.direction == "a2b": #hardcode / change to familiar style can delete
+        if self.direction == "a2b":
             return a, b
         else:
             return b, a
 
-    def __len__(self): #len(data) = data.__len__()
+    def __len__(self):
         return len(self.image_filenames)

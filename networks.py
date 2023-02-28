@@ -5,7 +5,7 @@ import functools
 from torch.optim import lr_scheduler
 
 
-def get_norm_layer(norm_type='instance'): #no need too early change
+def get_norm_layer(norm_type='instance'):
     if norm_type == 'batch':
         norm_layer = functools.partial(nn.BatchNorm2d, affine=True)
     elif norm_type == 'instance':
@@ -19,20 +19,20 @@ def get_norm_layer(norm_type='instance'): #no need too early change
     return norm_layer
 
 
-def get_scheduler(optimizer, learning_rate_policy, starting_epoch_count, number_of_iteration, learning_rate_decay_iteration): #pass all variable opt variable inside
-    if learning_rate_policy == 'lambda':
+def get_scheduler(optimizer, lr_policy, epoch_count, niter, niter_decay, lr_decay_iters):
+    if lr_policy == 'lambda':
         def lambda_rule(epoch):
-            lr_l = 1.0 - max(0, epoch + starting_epoch_count - number_of_iteration) / float(learning_rate_decay_iteration + 1)
+            lr_l = 1.0 - max(0, epoch + epoch_count - niter) / float(niter_decay + 1)
             return lr_l
         scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_rule)
-    elif learning_rate_policy == 'step':
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=learning_rate_decay_iteration, gamma=0.1)
-    elif learning_rate_policy == 'plateau':
+    elif lr_policy == 'step':
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=lr_decay_iters, gamma=0.1)
+    elif lr_policy == 'plateau':
         scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.2, threshold=0.01, patience=5)
-    elif learning_rate_policy == 'cosine':
-        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=number_of_iteration, eta_min=0)
+    elif lr_policy == 'cosine':
+        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=niter, eta_min=0)
     else:
-        return NotImplementedError('learning rate policy [%s] is not implemented', learning_rate_policy)
+        return NotImplementedError('learning rate policy [%s] is not implemented', lr_policy)
     return scheduler
 
 
