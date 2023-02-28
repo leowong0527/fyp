@@ -4,7 +4,8 @@ PyTorch implementation of [Image-to-Image Translation Using Conditional Adversar
 
 Based on [pix2pix](https://phillipi.github.io/pix2pix/) by [Phillip Isola](https://github.com/phillipi) et al.
 
-images(looks wrong maybe input&output need to reverse): 
+images(looks wrong maybe input&output need to reverse)
+left one is real image right one is result but looks like input image: 
 
 <img src='iao.png' >
 
