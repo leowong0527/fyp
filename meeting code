@@ -1,0 +1,52 @@
+import numpy as np
+from PIL import Image
+from skimage.metrics import peak_signal_noise_ratio, structural similarity
+
+output = model(input)
+
+img_1 = np.array(image.open('3_ground_truth.jpg'))
+img_2 = np.array(image.open('3_input.jpg'))
+
+psnr = peak_signal_noise_ratio(img_1,img_2)
+ssim = structural_similarity(img_1,img_2,multichannel='True')
+
+print(psnr,ssim)
+print(np.array(img_2).shape)
+
+
+psnr_list
+for i in output:
+    psnr = peak_signal_noise_ratio(np.array(input[i]), np.array(output[i]))
+    psnr_list.append(psnr)
+mean_psnr = sum(psnr_list)/len(psnr_list)
+
+#usually 0-1 value
+
+#ssim default calculate black and white image
+
+#### replace in train.py
+psnr_ls, ssim_ls = [], []
+for batch in testing_data_loader:
+    input, target = batch[0].to(device), batch[1].to(device)
+
+    output = net_g(input)
+    img_out = np.array(output[0].permute(1,2,0).cpu().detach())
+    img_gt = np.array(target[0].permute(1,2,0).cpu().detach())
+    # (256,256,3)
+
+    Image.fromarray(np.uint8(img_out)).save('folder\\'+str(epoch)+'output.png')
+    Image.fromarray(np.uint8(img_gt)).save('folder\\'+str(epoch)+'ground_truth.png')
+
+    empty = []
+    merged_img = img_out[]
+    #think about how to combine 2 img to 1 img
+
+    psnr = peak_signal_noise_ratio(img_out,img_gt)
+    ssim = structural_similarity(img_out,img_gt,multichannel=True)
+    psnr_ls.append(psnr)
+    ssim_ls.append(sim)
+
+print("####")
+print("Average PSNR:", sum(psnr_ls)/len(psnr_ls))
+print("Average SSIM:", sum(ssim_ls)/len(ssim_ls))
+print("####")

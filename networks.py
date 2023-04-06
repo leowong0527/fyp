@@ -84,7 +84,7 @@ def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_typ
 
 # Defines the generator that consists of Resnet blocks between a few
 # downsampling/upsampling operations.
-class ResnetGenerator(nn.Module):
+class ResnetGenerator(nn.Module): #looks like network
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=9, padding_type='reflect'):
         assert(n_blocks >= 0)
         super(ResnetGenerator, self).__init__()

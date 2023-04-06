@@ -42,7 +42,7 @@ from dataset import DatasetFromFolder
 dataset = 'portrait'
 batch_size = 1
 test_batch_size = 1
-direction = 'b2a'
+direction = 'input2gt'
 input_nc = 3
 
 output_nc = 3
@@ -166,6 +166,7 @@ if __name__ == '__main__':
             psnr = 10 * log10(1 / mse.item())
             avg_psnr += psnr
         print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
+        #try to modify (remove it change to psnr, ssim)
 
         #checkpoint
         if epoch % 50 == 0:

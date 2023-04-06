@@ -21,8 +21,8 @@ from PIL import Image
 #print(opt)
 
 dataset = 'portrait'
-direction = 'b2a'
-nepochs = 4
+direction = 'input2gt'
+nepochs = 200
 cuda = 'store_true'
 
 device = torch.device("cuda:0" if cuda else "cpu")
@@ -31,10 +31,10 @@ model_path = "checkpoint/{}/netG_model_epoch_{}.pth".format(dataset, nepochs)
 
 net_g = torch.load(model_path).to(device)
 
-if direction == "a2b":
-    image_dir = "dataset/{}/test/a/".format(dataset)
+if direction == "gt2input":
+    image_dir = "dataset/{}/test/gt/".format(dataset)
 else:
-    image_dir = "dataset/{}/test/b/".format(dataset)
+    image_dir = "dataset/{}/test/input/".format(dataset)
 
 image_filenames = [x for x in os.listdir(image_dir)]
 
