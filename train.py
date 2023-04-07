@@ -49,8 +49,8 @@ output_nc = 3
 ngf = 64
 ndf = 64
 epoch_count = 1
-niter = 100
-niter_decay = 100
+niter = 225
+niter_decay = 225
 
 learning_rate = 0.0002
 lr_policy = 'lambda'

@@ -22,7 +22,7 @@ from PIL import Image
 
 dataset = 'portrait'
 direction = 'input2gt'
-nepochs = 200
+nepochs = 450
 cuda = 'store_true'
 
 device = torch.device("cuda:0" if cuda else "cpu")
