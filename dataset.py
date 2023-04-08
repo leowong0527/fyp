@@ -52,8 +52,8 @@ class DatasetFromFolder(data.Dataset):
 
         
         #Normalize: convert the pixels values from 0-255 to 0-1
-          cropped_gt = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(gt)
-          cropped_input = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(input)
+          cropped_gt = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(cropped_gt)
+          cropped_input = transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))(cropped_input)
         
         #use the 50% sample to train
           if random.random() < 0.5:
