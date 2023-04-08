@@ -29,7 +29,7 @@ class DatasetFromFolder(data.Dataset):
       #open the gt and input image
         gt = Image.open(join(self.gt_path, self.image_filenames[index])).convert('RGB')
         input = Image.open(join(self.input_path, self.image_filenames[index])).convert('RGB')
-        for i in range(1,21):
+        for i in range(1,31):
       #resize the image
           gt = gt.resize((286, 286), Image.BICUBIC) #resize change to crop (pillow crop)
           input = input.resize((286, 286), Image.BICUBIC) #resize change to crop (pillow crop)
