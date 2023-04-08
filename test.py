@@ -11,6 +11,8 @@ import numpy as np
 
 from PIL import Image
 
+from random_crop import random_crop
+
 # Testing settings
 #parser = argparse.ArgumentParser(description='pix2pix-pytorch-implementation')
 #parser.add_argument('--dataset', required=True, help='facades')
@@ -45,7 +47,8 @@ transform = transforms.Compose(transform_list)
 
 for image_name in image_filenames:
     img = Image.open(image_dir + image_name).convert('RGB')
-    img = img.resize((256, 256), Image.BICUBIC)
+    ##img = img.resize((256, 256), Image.BICUBIC)
+    img, img = random_crop(img, img, 256)
     img = transform(img)
     input = img.unsqueeze(0).to(device)
     out = net_g(input)

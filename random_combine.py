@@ -3,31 +3,29 @@ import numpy as np
 from PIL import Image as im
 from os.path import join
 
-def random_combine(imgIn = "sample_data/1 (43)_B.jpeg", imgGT = "sample_data/1 (43).jpeg", minSize = 500, maxSize =1000, count=0):
-    # imgIn = im.open(join("pix2pix-pytorch-master", imgIn)) 
-    # imgGT = im.open(join("pix2pix-pytorch-master", imgGT)) 
+def random_combine(img_input = "sample_data/1 (43)_B.jpeg", img_gt = "sample_data/1 (43).jpeg", minSize = 500, maxSize =1000): # just random initialization
 
-    imgIn = im.open(join(imgIn)) 
-    imgGT = im.open(join(imgGT))
+    ##img_input = im.open(join(img_input)) 
+    ##img_gt = im.open(join(img_gt))
 
-    width, height = imgIn.size
-    print(width, height)
+    width, height = img_input.size
+    ##print(width, height)
     left = random.randint(0, width - minSize)
     right = left + random.randint(minSize, maxSize)
     top = random.randint(0, height - minSize)
     bottom = top + random.randint(minSize, maxSize)
-    print(left, right, top, bottom)
+    ##print(left, right, top, bottom)
 
-    imgIn = np.array(imgIn)
-    imgGT = np.array(imgGT)
+    img_input = np.array(img_input)
+    img_gt = np.array(img_gt)
     
-    imgIn[top:bottom, left:right, :] = 0
-    imgGT[:, 0:left, :] = 0
-    imgGT[:, right:, :] = 0
-    imgGT[0:top, :, :] = 0
-    imgGT[bottom:, :, :] = 0
+    img_gt[top:bottom, left:right, :] = 0
+    img_input[:, 0:left, :] = 0
+    img_input[:, right:, :] = 0
+    img_input[0:top, :, :] = 0
+    img_input[bottom:, :, :] = 0
     
-    result = imgGT + imgIn
+    result = img_gt + img_input
     data = im.fromarray(result)
-    filename = str(i) + ".png"
-    return data.save(filename), im.open(filename).show()
+    ##filename = str(i) + ".png"
+    return data

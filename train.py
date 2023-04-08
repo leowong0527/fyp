@@ -14,6 +14,10 @@ import torch.backends.cudnn as cudnn
 from networks import define_G, define_D, GANLoss, get_scheduler, update_learning_rate
 #from data import get_training_set, get_test_set
 
+import numpy as np
+from PIL import Image
+from skimage.metrics import peak_signal_noise_ratio, structural_similarity
+
 from dataset import DatasetFromFolder
 
 # Training settings
@@ -49,8 +53,8 @@ output_nc = 3
 ngf = 64
 ndf = 64
 epoch_count = 1
-niter = 225
-niter_decay = 225
+niter = 250
+niter_decay = 250
 
 learning_rate = 0.0002
 lr_policy = 'lambda'
@@ -62,7 +66,6 @@ threads = 4
 seed = 123
 lamb = 10
 
-#print(opt)
 
 #if cuda and not torch.cuda.is_available():
 #    raise Exception("No GPU found, please run without --cuda")
@@ -157,16 +160,35 @@ if __name__ == '__main__':
         update_learning_rate(net_d_scheduler, optimizer_d)
 
         # test
-        avg_psnr = 0
+        psnr_ls, ssim_ls, img_out_ls = [], [], []
+        
+        ##avg_psnr = 0
         for batch in testing_data_loader:
             input, target = batch[0].to(device), batch[1].to(device)
 
-            prediction = net_g(input)
-            mse = criterionMSE(prediction, target)
-            psnr = 10 * log10(1 / mse.item())
-            avg_psnr += psnr
-        print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
+            ##prediction = net_g(input)
+            ##mse = criterionMSE(prediction, target)
+            ##psnr = 10 * log10(1 / mse.item())
+            ##avg_psnr += psnr
+        ##print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
         #try to modify (remove it change to psnr, ssim)
+            output = net_g(input)
+            
+            img_out = np.array(output[0].permute(1, 2, 0).cpu().detach())
+            img_gt = np.array(target[0].permute(1, 2, 0).cpu().detach())
+            
+            Image.fromarray(np.uint8(img_out)).save('test_output_image\\' + str(epoch)+ 'output.png')
+            Image.fromarray(np.uint8(img_gt)).save('test_output_image\\' + str(epoch)+ 'ground_truth.png')
+            
+            psnr = peak_signal_noise_ratio(img_out, img_gt)
+            ssim = structural_similarity(img_out, img_gt, multichannel = True)
+            psnr_ls.append(psnr)
+            ssim_ls.append(ssim)
+            
+        print("################")
+        print("Average PSNR:", sum(psnr_ls) / len(psnr_ls))
+        print("Average SSIM:", sum(ssim_ls) / len(ssim_ls))
+        print("################")
 
         #checkpoint
         if epoch % 50 == 0:
