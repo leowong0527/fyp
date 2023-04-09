@@ -4,6 +4,7 @@ import os
 from math import log10
 
 from os.path import join
+from PIL import Image
 
 import torch
 import torch.nn as nn
@@ -15,7 +16,6 @@ from networks import define_G, define_D, GANLoss, get_scheduler, update_learning
 #from data import get_training_set, get_test_set
 
 import numpy as np
-from PIL import Image
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
 
 from dataset import DatasetFromFolder

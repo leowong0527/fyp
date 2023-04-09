@@ -21,10 +21,11 @@ from random_crop import random_crop
 #parser.add_argument('--cuda', action='store_true', help='use cuda')
 #opt = parser.parse_args()
 #print(opt)
-
+torch.manual_seed(123)
 dataset = 'portrait'
 direction = 'input2gt'
-nepochs = 450
+##direction = 'gt2input'
+nepochs = 400
 cuda = 'store_true'
 
 device = torch.device("cuda:0" if cuda else "cpu")
