@@ -28,9 +28,10 @@ class DatasetFromFolder(data.Dataset):
         self.transform = transforms.Compose(transform_list)
 
     def __getitem__(self, index):
-        img_gt = Image.open(join(self.gt_path, self.image_filenames[index])).convert('RGB')
-        img_input = Image.open(join(self.input_path, self.image_filenames[index])).convert('RGB')
-
+        img_gt = Image.open(join(self.gt_path, self.image_filenames[index]))
+        img_gt = img_gt.convert('RGB')
+        img_input = Image.open(join(self.input_path, self.image_filenames[index]))
+        img_input = img_input.convert('RGB')
         ##img_gt = img_gt.resize((286, 286), Image.BICUBIC) #resize change to crop (pillow crop)
         ##img_input = img_input.resize((286, 286), Image.BICUBIC) #resize change to crop (pillow crop)
 
@@ -61,7 +62,7 @@ class DatasetFromFolder(data.Dataset):
             
     def __len__(self):
         return len(self.image_filenames)
-        
+            
 '''
 
       #open the gt and input image
