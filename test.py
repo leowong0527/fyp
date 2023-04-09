@@ -25,7 +25,7 @@ torch.manual_seed(123)
 dataset = 'portrait'
 direction = 'input2gt'
 ##direction = 'gt2input'
-nepochs = 400
+nepochs = 450
 cuda = 'store_true'
 
 device = torch.device("cuda:0" if cuda else "cpu")
