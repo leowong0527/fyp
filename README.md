@@ -19,7 +19,7 @@ Based on [pix2pix](https://phillipi.github.io/pix2pix/) by [Phillip Isola](https
 
 + Clone this repo
 + Create 'dataset/portrait_shuffle/train/'
-+ Create 'dataset/portrait_shuffle/test/'
++ Create 'dataset/portrait_shuffle/new_test/'
 + Put training set and test set into train/test folder
 + Train the model:
 
