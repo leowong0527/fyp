@@ -13,37 +13,10 @@ from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 
 from networks import define_G, define_D, GANLoss, get_scheduler, update_learning_rate
-#from data import get_training_set, get_test_set
-
-import numpy as np
-from skimage.metrics import peak_signal_noise_ratio, structural_similarity
 
 from dataset import DatasetFromFolder
 
-# Training settings
-#parser = argparse.ArgumentParser(description='pix2pix-pytorch-implementation')
-#parser.add_argument('--dataset', required=True, help='facades')
-#parser.add_argument('--batch_size', type=int, default=1, help='training batch size')
-#parser.add_argument('--test_batch_size', type=int, default=1, help='testing batch size')
-#parser.add_argument('--direction', type=str, default='b2a', help='a2b or b2a')
-#parser.add_argument('--input_nc', type=int, default=3, help='input image channels')
-#parser.add_argument('--output_nc', type=int, default=3, help='output image channels')
-#parser.add_argument('--ngf', type=int, default=64, help='generator filters in first conv layer')
-#parser.add_argument('--ndf', type=int, default=64, help='discriminator filters in first conv layer')
-#parser.add_argument('--epoch_count', type=int, default=1, help='the starting epoch count')
-#parser.add_argument('--niter', type=int, default=2, help='# of iter at starting learning rate')
-#parser.add_argument('--niter_decay', type=int, default=2, help='# of iter to linearly decay learning rate to zero')
-#parser.add_argument('--lr', type=float, default=0.0002, help='initial learning rate for adam')
-#parser.add_argument('--lr_policy', type=str, default='lambda', help='learning rate policy: lambda|step|plateau|cosine')
-#parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
-#parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
-#parser.add_argument('--cuda', action='store_true', help='use cuda?')
-#parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
-#parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
-#parser.add_argument('--lamb', type=int, default=10, help='weight on L1 term in objective')
-#opt = parser.parse_args()
-
-dataset = 'portrait'
+dataset = 'portrait_shuffle'
 batch_size = 1
 test_batch_size = 1
 direction = 'input2gt'
@@ -66,15 +39,9 @@ threads = 4
 seed = 123
 lamb = 10
 
-
-#if cuda and not torch.cuda.is_available():
-#    raise Exception("No GPU found, please run without --cuda")
-
 cudnn.benchmark = True
 
 torch.manual_seed(seed)
-#if cuda:
-#    torch.cuda.manual_seed(seed)
 
 print('===> Loading datasets')
 root_path = "dataset/"
@@ -159,39 +126,8 @@ if __name__ == '__main__':
         update_learning_rate(net_g_scheduler, optimizer_g)
         update_learning_rate(net_d_scheduler, optimizer_d)
 
-        # test
-        psnr_ls, ssim_ls, img_out_ls = [], [], []
-        
-        ##avg_psnr = 0
-        for batch in testing_data_loader:
-            input, target = batch[0].to(device), batch[1].to(device)
-
-            ##prediction = net_g(input)
-            ##mse = criterionMSE(prediction, target)
-            ##psnr = 10 * log10(1 / mse.item())
-            ##avg_psnr += psnr
-        ##print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
-        #try to modify (remove it change to psnr, ssim)
-            output = net_g(input)
-            
-            img_out = np.array(output[0].permute(1, 2, 0).cpu().detach())
-            img_gt = np.array(target[0].permute(1, 2, 0).cpu().detach())
-            
-            Image.fromarray(np.uint8(img_out)).save('test_output_image\\' + str(epoch)+ 'output.png')
-            Image.fromarray(np.uint8(img_gt)).save('test_output_image\\' + str(epoch)+ 'ground_truth.png')
-            
-            psnr = peak_signal_noise_ratio(img_out, img_gt)
-            ssim = structural_similarity(img_out, img_gt, multichannel = True)
-            psnr_ls.append(psnr)
-            ssim_ls.append(ssim)
-            
-        print("################")
-        print("Average PSNR:", sum(psnr_ls) / len(psnr_ls))
-        print("Average SSIM:", sum(ssim_ls) / len(ssim_ls))
-        print("################")
-
         #checkpoint
-        if epoch % 50 == 0:
+        if epoch % 5 == 0:
             if not os.path.exists("checkpoint"):
                 os.mkdir("checkpoint")
             if not os.path.exists(os.path.join("checkpoint", dataset)):

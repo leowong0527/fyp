@@ -5,16 +5,11 @@ from os.path import join
 
 def random_combine(img_input = "sample_data/1 (43)_B.jpeg", img_gt = "sample_data/1 (43).jpeg", minSize = 500, maxSize =1000): # just random initialization
 
-    ##img_input = im.open(join(img_input)) 
-    ##img_gt = im.open(join(img_gt))
-
     width, height = img_input.size
-    ##print(width, height)
     left = random.randint(0, width - minSize)
     right = left + random.randint(minSize, maxSize)
     top = random.randint(0, height - minSize)
     bottom = top + random.randint(minSize, maxSize)
-    ##print(left, right, top, bottom)
 
     img_input = np.array(img_input)
     img_gt = np.array(img_gt)
@@ -27,5 +22,4 @@ def random_combine(img_input = "sample_data/1 (43)_B.jpeg", img_gt = "sample_dat
     
     result = img_gt + img_input
     data = im.fromarray(result)
-    ##filename = str(i) + ".png"
     return data

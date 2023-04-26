@@ -4,28 +4,17 @@ import os
 
 import torch
 import torchvision.transforms as transforms
-
+import pandas as pd
 import numpy as np
 
-#from utils import is_image_file, load_img, save_img
-
+from skimage.metrics import peak_signal_noise_ratio, structural_similarity
 from PIL import Image
-
 from random_crop import random_crop
 
-# Testing settings
-#parser = argparse.ArgumentParser(description='pix2pix-pytorch-implementation')
-#parser.add_argument('--dataset', required=True, help='facades')
-#parser.add_argument('--direction', type=str, default='b2a', help='a2b or b2a')
-#parser.add_argument('--nepochs', type=int, default=4, help='saved model of which epochs')
-#parser.add_argument('--cuda', action='store_true', help='use cuda')
-#opt = parser.parse_args()
-#print(opt)
 torch.manual_seed(123)
-dataset = 'portrait'
+dataset = 'portrait_shuffle'
 direction = 'input2gt'
-##direction = 'gt2input'
-nepochs = 450
+nepochs = 340
 cuda = 'store_true'
 
 device = torch.device("cuda:0" if cuda else "cpu")
@@ -34,12 +23,11 @@ model_path = "checkpoint/{}/netG_model_epoch_{}.pth".format(dataset, nepochs)
 
 net_g = torch.load(model_path).to(device)
 
-if direction == "gt2input":
-    image_dir = "dataset/{}/test/gt/".format(dataset)
-else:
-    image_dir = "dataset/{}/test/input/".format(dataset)
+image_dir_gt = "dataset/portrait_shuffle/new_test/gt/"
+image_dir_input = "dataset/portrait_shuffle/new_test/input/"
 
-image_filenames = [x for x in os.listdir(image_dir)]
+image_filenames_gt = [x for x in os.listdir(image_dir_gt)]
+image_filenames = [x for x in os.listdir(image_dir_input)]
 
 transform_list = [transforms.ToTensor(),
                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
@@ -47,11 +35,10 @@ transform_list = [transforms.ToTensor(),
 transform = transforms.Compose(transform_list)
 
 for image_name in image_filenames:
-    img = Image.open(image_dir + image_name).convert('RGB')
-    ##img = img.resize((256, 256), Image.BICUBIC)
-    img, img = random_crop(img, img, 256)
-    img = transform(img)
-    input = img.unsqueeze(0).to(device)
+    img_input = Image.open(image_dir_input + image_name).convert('RGB')
+    img_gt = Image.open(image_dir_gt + image_name).convert('RGB')
+    img_input = transform(img_input)
+    input = img_input.unsqueeze(0).to(device)
     out = net_g(input)
     out_img = out.detach().squeeze(0).cpu()
 
@@ -65,3 +52,31 @@ for image_name in image_filenames:
     image_pil = Image.fromarray(image_numpy)
     image_pil.save(filename)
     print("Image saved as {}".format(filename))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

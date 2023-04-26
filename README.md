@@ -4,9 +4,9 @@ PyTorch implementation of [Image-to-Image Translation Using Conditional Adversar
 
 Based on [pix2pix](https://phillipi.github.io/pix2pix/) by [Phillip Isola](https://github.com/phillipi) et al.
 
-<img src='groundtruth.png' >
+<img src='gt.png' >
 
-<img src='result.png' >
+<img src='output.png' >
 
 ## Prerequisites
 
@@ -18,7 +18,9 @@ Based on [pix2pix](https://phillipi.github.io/pix2pix/) by [Phillip Isola](https
 ## Getting Started
 
 + Clone this repo
-
++ Create 'dataset/portrait_shuffle/train/'
++ Create 'dataset/portrait_shuffle/test/'
++ Put training set and test set into train/test folder
 + Train the model:
 
     python train.py
@@ -26,10 +28,12 @@ Based on [pix2pix](https://phillipi.github.io/pix2pix/) by [Phillip Isola](https
 + Test the model:
 
     python test.py
++ Test PSNR & SSIM
 
+    python psnr_ssim.py
 ## Acknowledgments
 
-This code is a simple implementation of [pix2pix](https://phillipi.github.io/pix2pix/). Easier to understand. Note that we use a downsampling-resblocks-upsampling structure instead of the unet structure in this code, therefore the results of this code may inconsistent with the results presented in the paper.
+This code is a reference of [pix2pix](https://phillipi.github.io/pix2pix/).
 
 Highly recommend the more sophisticated and organized code [pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix).
 
